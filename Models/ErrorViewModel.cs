@@ -1,4 +1,4 @@
-namespace e_shows.Models
+﻿namespace e_shows.Models
 {
     public class ErrorViewModel
     {
