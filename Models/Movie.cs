@@ -5,6 +5,11 @@ namespace e_shows.Models
 {
     public partial class Movie
     {
+        public Movie()
+        {
+            ActorMovies = new HashSet<ActorMovie>();
+        }
+
         public int MId { get; set; }
         public string? MName { get; set; }
         public string? MDescription { get; set; }
@@ -13,5 +18,7 @@ namespace e_shows.Models
         public DateTime? MStartDate { get; set; }
         public DateTime? MEndDate { get; set; }
         public string? McCategory { get; set; }
+
+        public virtual ICollection<ActorMovie> ActorMovies { get; set; }
     }
 }

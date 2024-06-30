@@ -9,5 +9,7 @@ namespace e_shows.Models
         public string? ActName { get; set; }
         public string? ActImageUrl { get; set; }
         public string? ActBio { get; set; }
+
+        public virtual ActorMovie? ActorMovie { get; set; }
     }
 }

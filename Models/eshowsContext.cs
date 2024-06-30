@@ -16,17 +16,21 @@ namespace e_shows.Models
         {
         }
 
-        public virtual DbSet<Actor> Actors { get; set; } = null!;
+        public virtual DbSet<Actor> Actor { get; set; } = null!;
+        public virtual DbSet<ActorMovie> ActorMovies { get; set; } = null!;
+        public virtual DbSet<Artist> Artists { get; set; } = null!;
+        public virtual DbSet<CategoryDetail> CategoryDetails { get; set; } = null!;
+        public virtual DbSet<CategoryMaster> CategoryMasters { get; set; } = null!;
         public virtual DbSet<Cinema> Cinemas { get; set; } = null!;
-        public virtual DbSet<Movie> Movies { get; set; } = null!;
-        public virtual DbSet<MovieCategory> MovieCategories { get; set; } = null!;
-        public virtual DbSet<Producer> Producers { get; set; } = null!;
+        public virtual DbSet<DepartmentDetail> DepartmentDetails { get; set; } = null!;
+        public virtual DbSet<LocationDetail> LocationDetails { get; set; } = null!;
+        public virtual DbSet<Movie> Movie { get; set; } = null!;
+        public virtual DbSet<Producer> Producer { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
-               
             }
         }
 
@@ -56,6 +60,96 @@ namespace e_shows.Models
                     .HasColumnName("ACT_Name");
             });
 
+            modelBuilder.Entity<ActorMovie>(entity =>
+            {
+                entity.HasKey(e => e.AmId);
+
+                entity.ToTable("ActorMovie");
+
+                entity.Property(e => e.AmId)
+                    .ValueGeneratedNever()
+                    .HasColumnName("AM_ID");
+
+                entity.Property(e => e.ActId).HasColumnName("ACT_ID");
+
+                entity.Property(e => e.MId).HasColumnName("M_ID");
+
+                entity.HasOne(d => d.Am)
+                    .WithOne(p => p.ActorMovie)
+                    .HasForeignKey<ActorMovie>(d => d.AmId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ActorMovie_Actor");
+
+                entity.HasOne(d => d.MIdNavigation)
+                    .WithMany(p => p.ActorMovies)
+                    .HasForeignKey(d => d.MId)
+                    .HasConstraintName("FK_ActorMovie_Movie");
+            });
+
+            modelBuilder.Entity<Artist>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToTable("Artist");
+
+                entity.Property(e => e.ArtBio).HasColumnName("ART_Bio");
+
+                entity.Property(e => e.ArtId).HasColumnName("ART_ID");
+
+                entity.Property(e => e.ArtImageUrl).HasColumnName("ART_Image_URL");
+
+                entity.Property(e => e.ArtName)
+                    .HasMaxLength(200)
+                    .HasColumnName("ART_Name");
+            });
+
+            modelBuilder.Entity<CategoryDetail>(entity =>
+            {
+                entity.HasKey(e => e.CtId);
+
+                entity.ToTable("CategoryDetail");
+
+                entity.Property(e => e.CtId)
+                    .ValueGeneratedNever()
+                    .HasColumnName("CT_ID");
+
+                entity.Property(e => e.CmId).HasColumnName("CM_ID");
+
+                entity.Property(e => e.CtCdt)
+                    .HasColumnType("datetime")
+                    .HasColumnName("CT_CDT");
+
+                entity.Property(e => e.CtIsActive).HasColumnName("CT_IsActive");
+
+                entity.Property(e => e.CtMdt)
+                    .HasColumnType("datetime")
+                    .HasColumnName("CT_MDT");
+
+                entity.Property(e => e.CtName)
+                    .HasMaxLength(200)
+                    .HasColumnName("CT_Name");
+
+                entity.HasOne(d => d.Cm)
+                    .WithMany(p => p.CategoryDetails)
+                    .HasForeignKey(d => d.CmId)
+                    .HasConstraintName("FK_CategoryDetail_CategoryMaster");
+            });
+
+            modelBuilder.Entity<CategoryMaster>(entity =>
+            {
+                entity.HasKey(e => e.CmId);
+
+                entity.ToTable("CategoryMaster");
+
+                entity.Property(e => e.CmId)
+                    .ValueGeneratedNever()
+                    .HasColumnName("CM_ID");
+
+                entity.Property(e => e.CmName)
+                    .HasMaxLength(50)
+                    .HasColumnName("CM_Name");
+            });
+
             modelBuilder.Entity<Cinema>(entity =>
             {
                 entity.HasKey(e => e.CId);
@@ -71,6 +165,60 @@ namespace e_shows.Models
                 entity.Property(e => e.CLogo).HasColumnName("C_Logo");
 
                 entity.Property(e => e.CName).HasColumnName("C_Name");
+            });
+
+            modelBuilder.Entity<DepartmentDetail>(entity =>
+            {
+                entity.HasKey(e => e.DpId);
+
+                entity.ToTable("DepartmentDetail");
+
+                entity.Property(e => e.DpId)
+                    .ValueGeneratedNever()
+                    .HasColumnName("DP_ID");
+
+                entity.Property(e => e.DpCdt)
+                    .HasColumnType("datetime")
+                    .HasColumnName("DP_CDT");
+
+                entity.Property(e => e.DpIsActive).HasColumnName("DP_IsActive");
+
+                entity.Property(e => e.DpMdt)
+                    .HasColumnType("datetime")
+                    .HasColumnName("DP_MDT");
+
+                entity.Property(e => e.DpName).HasColumnName("DP_Name");
+
+                entity.Property(e => e.LcId).HasColumnName("LC_ID");
+            });
+
+            modelBuilder.Entity<LocationDetail>(entity =>
+            {
+                entity.HasKey(e => e.LcId);
+
+                entity.ToTable("LocationDetail");
+
+                entity.Property(e => e.LcId)
+                    .ValueGeneratedNever()
+                    .HasColumnName("LC_ID");
+
+                entity.Property(e => e.LcCdt)
+                    .HasColumnType("datetime")
+                    .HasColumnName("LC_CDT");
+
+                entity.Property(e => e.LcCountry)
+                    .HasMaxLength(50)
+                    .HasColumnName("LC_Country");
+
+                entity.Property(e => e.LcIsActive).HasColumnName("LC_IsActive");
+
+                entity.Property(e => e.LcMdt)
+                    .HasColumnType("datetime")
+                    .HasColumnName("LC_MDT");
+
+                entity.Property(e => e.LcName)
+                    .HasMaxLength(200)
+                    .HasColumnName("LC_Name");
             });
 
             modelBuilder.Entity<Movie>(entity =>
@@ -100,21 +248,6 @@ namespace e_shows.Models
                 entity.Property(e => e.MStartDate)
                     .HasColumnType("datetime")
                     .HasColumnName("M_StartDate");
-
-                entity.Property(e => e.McCategory)
-                    .HasMaxLength(50)
-                    .HasColumnName("MC_Category");
-            });
-
-            modelBuilder.Entity<MovieCategory>(entity =>
-            {
-                entity.HasKey(e => e.McId);
-
-                entity.ToTable("MovieCategory");
-
-                entity.Property(e => e.McId)
-                    .ValueGeneratedNever()
-                    .HasColumnName("MC_ID");
 
                 entity.Property(e => e.McCategory)
                     .HasMaxLength(50)
