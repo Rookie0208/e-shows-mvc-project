@@ -14,7 +14,7 @@ namespace e_shows.Controllers
         public IActionResult Index()
         {
             var data = context.Actor.ToList();
-            return View();
+            return View(data);
         }
     }
 }

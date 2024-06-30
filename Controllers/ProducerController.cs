@@ -15,7 +15,7 @@ namespace e_shows.Controllers
         public async Task<IActionResult> Index()
         {
             var producers = await context.Producer.ToListAsync();
-            return View();
+            return View(producers);
         }
     }
 }

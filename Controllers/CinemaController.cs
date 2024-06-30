@@ -14,8 +14,8 @@ namespace e_shows.Controllers
         }
         public async Task<IActionResult> Index()
         {
-            var movies = await context.Cinemas.ToListAsync();
-            return View();
+            var cinemas = await context.Cinemas.ToListAsync();
+            return View(cinemas);
         }
     }
 }

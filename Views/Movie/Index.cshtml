@@ -1,0 +1,60 @@
+﻿@model IEnumerable<e_shows.Models.Movie>
+
+@{
+    ViewData["Title"] = "List of Movies";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+<div class="row">
+    @foreach (var item in Model)
+    {
+        <div class="col-md-3 col-xs-6 border-primary mb-3">
+            <div class="card" style="width: 18rem;">
+                <img src="@item.MImageUrl" class="card-img-top" alt="...">
+                <div class="card-body bg-opacity-50">
+                    <h5 class="card-title"><b> @item.MName </b></h5>
+                    <p class="card-text">@item.MDescription</p>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"> <b>Cinema </b> : </li>
+                    <li class="list-group-item"><b>Category</b> : @item.McCategory</li>
+                    @* <li class="list-group-item">Start Date : @item.MStartDate</li> *@
+                    <li class="list-group-item">
+                        <b>Start Date</b> : @(item.MStartDate.HasValue ? item.MStartDate.Value.ToString("dd MMMM yyyy") : "N/A")
+                    </li>
+                    <li class="list-group-item">
+                        <b>End Date</b> : @(item.MStartDate.HasValue ? item.MEndDate.Value.ToString("dd MMMM yyyy") : "N/A")
+                    </li>
+
+                    @* <li class="list-group-item">End Date : @item.MEndDate</li> *@
+                    <li class="list-group-item">
+                        <b>Status</b> :
+                        @{
+                            if (DateTime.Now >= item.MStartDate && DateTime.Now <= item.MEndDate)
+                            {
+                                <span class="badge bg-success text-white">Available</span>
+                            }
+                            else if(DateTime.Now >= item.MEndDate)
+                            {
+                                <span class="badge bg-danger text-white">Expired</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-primary text-white">Upcoming</span>
+                            }
+                        }
+                    </li>
+                </ul>
+                <div class="card-body d-flex justify-content-center align-items-center">
+                    <a asp-action="Detail" asp-route-id="item.MId" class="card-link btn btn-success text-white">Show Details</a>
+                    <a class="btn btn-outline-primary card-link" href="#"><i class="bi-cart-plus"></i>Add to Cart @item.MPrice$</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
