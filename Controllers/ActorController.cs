@@ -1,19 +1,20 @@
-﻿using e_shows.Models;
+﻿using e_shows.Data.Services;
+using e_shows.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace e_shows.Controllers
 {
     public class ActorController : Controller
     {
-        private readonly eshowsContext context;
+        private readonly IActorService service;
 
-        public ActorController(eshowsContext context)
+        public ActorController(IActorService service)
         {
-            this.context = context;
+            this.service = service;
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var data = context.Actor.ToList();
+            var data = service.GetActors();
             return View(data);
         }
     }
